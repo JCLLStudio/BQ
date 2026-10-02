@@ -1,0 +1,1 @@
+Ilagay dito ang q00.mp3 (practice) hanggang q25.mp3. Sa sfx/: question_start, timer_start, timer_warning, times_up, correct, leaderboard, drumroll, winner (.wav). Opsyonal ang lahat; kung wala, tahimik lang.

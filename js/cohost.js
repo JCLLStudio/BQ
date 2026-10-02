@@ -1,0 +1,9 @@
+const HID='soe-bq-2026-host',A=document.getElementById('app'),L='ABCD',EM=['🟥','🟦','🟨','🟪'];let lv=null,pe,c,rt,msg='';
+function ask(){A.innerHTML=`<div class=c><h1>🤝 Co-Host</h1><p>${msg}</p><input id=pin class=nm inputmode=numeric placeholder="PIN mula sa Controller" value="${localStorage.soe_pin||''}"><button class=go onclick="go()">Pumasok</button></div>`}
+function go(){localStorage.soe_pin=document.getElementById('pin').value.trim();msg='';connect()}
+function connect(){try{pe&&pe.destroy()}catch(e){}pe=new Peer();pe.on('open',()=>{c=pe.connect(HID,{reliable:true});c.on('open',()=>c.send({t:'co',pin:localStorage.soe_pin}));c.on('data',m=>{if(m.t==='c')draw(m.v);else if(m.t==='nopin'){msg='Maling PIN';ask()}});c.on('close',retry)});pe.on('error',retry)}
+function retry(){clearTimeout(rt);rt=setTimeout(connect,2000)}
+function draw(v){v.end=Date.now()+(v.left||0);lv=v;const ch=[...Array(9)].map((_,i)=>{const g=i+1,x=groupInfo(g),a=v.ans[g];return `<span class="chip" style="border-color:${x.color};background:${x.color};color:${x.textColor}"><b>${x.code}</b> · ${x.name} · ${x.leader} · ${v.cn.includes(g)?'🟢':v.own.includes(g)?'🟡':'🔴'} · ${v.sc[i]} pts · ${a!==undefined?EM[a]:'–'}</span>`}).join(' ');
+A.innerHTML=`<div class=hp><h1>🤝 Co-Host</h1><p>${v.cn.length}/9 groups · 👥 ${v.ac} audience · ${v.ph}${v.au?' · 🔊 AUDIO PLAYING':''} <b id=t></b></p><div class=chips>${ch}</div>`+(v.q?`<h2>${v.n?'Question '+v.n+' / 25':'Practice'}</h2><p>${v.q}</p><ol type=A>${v.o.map((t,i)=>`<li class="${i===v.a?'ok':''}">${EM[i]} ${t}</li>`).join('')}</ol>${v.r?`<div class=clue>💡 <b>${v.r}</b> — ${v.x}</div>`:''}${v.as?`<p>👥 Audience: ${v.as[0]} / ${v.as[1]} ang tama</p>`:''}`:'<p>Naghihintay sa laro…</p>')+'</div>';tick()}
+function tick(){const e=document.getElementById('t');if(e)e.textContent=lv&&lv.ph==='run'?Math.max(0,Math.ceil((lv.end-Date.now())/1000)):''}setInterval(tick,200);
+localStorage.soe_pin?connect():ask();

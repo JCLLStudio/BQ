@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="tl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SOE Bible Quiz — Editor ng Tanong</title>
+<link rel="stylesheet" href="css/editor.css">
+<body class="ed">
+<div class="app">
+  <aside class="rail">
+    <h1>Editor ng mga Tanong</h1>
+    <p class="mu">Para sa <code>questions.json</code> ng SOE Bible Quiz</p>
+
+    <section class="grp">
+      <h2>Kunin ang mga tanong</h2>
+      <button id="open">Buksan ang JSON file</button>
+      <button id="fromhost">Kunin ang naka-install sa Host</button>
+      <button id="blank">Magsimula sa bagong set</button>
+    </section>
+
+    <section class="grp" id="savegrp" hidden>
+      <h2>I-save</h2>
+      <button id="undo" data-act="undo" disabled>I-undo ang huling pagbabago</button>
+      <button id="dl" class="pri">I-download ang questions.json</button>
+      <button id="send">Ipadala sa Host</button>
+      <p class="mu small">Gumagana ang “Ipadala sa Host” kung iisang browser ang Editor at Controller. Kung hindi, i-download at gamitin ang REINSTALL QUESTIONS sa Controller.</p>
+    </section>
+
+    <section class="grp" id="statgrp" hidden>
+      <h2 id="count"></h2>
+      <div id="dist" class="dist"></div>
+      <div id="grid" class="grid" aria-label="Mga tanong"></div>
+      <ul id="issues" class="issues"></ul>
+    </section>
+  </aside>
+
+  <main>
+    <div id="empty" class="empty">
+      <h2>Wala pang nakabukas na tanong</h2>
+      <p>Buksan ang <code>questions.json</code>, kunin ang mga tanong na naka-install na sa Host, o magsimula sa bagong set na 1 practice at 25 tanong.</p>
+      <button class="pri" id="open2">Buksan ang JSON file</button>
+      <button id="fromhost2">Kunin ang naka-install sa Host</button>
+      <button id="blank2">Magsimula sa bagong set</button>
+    </div>
+
+    <div id="work" hidden>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-form" aria-selected="true">Form</button>
+        <button role="tab" id="tab-raw" aria-selected="false">Raw JSON</button>
+      </div>
+
+      <div id="formview">
+        <p class="hint">Pindutin ang titik (A–D) para itakda ang tamang sagot. Awtomatikong nase-save ang draft sa browser na ito.</p>
+        <div id="list"></div>
+        <button id="add" class="wide">+ Magdagdag ng tanong sa dulo</button>
+      </div>
+
+      <div id="rawview" hidden>
+        <textarea id="raw" spellcheck="false" aria-label="Raw JSON"></textarea>
+        <p id="rawerr" class="err" role="alert"></p>
+        <button id="applyraw" class="pri">I-apply ang pagbabago</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<input type="file" id="file" accept=".json,application/json" hidden>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="js/qcheck.js"></script>
+<script src="js/editor.js"></script>

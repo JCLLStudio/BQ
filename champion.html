@@ -1,0 +1,11 @@
+<!doctype html><html lang="tl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SOE Bible Quiz — Group Champion</title><link rel="stylesheet" href="css/style.css"><body><div id="app"></div><script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script><script src="js/groups.js"></script><script>
+const HID='soe-bq-2026-host',A=document.getElementById('app');let pe,c,rt;
+function connect(){pe=new Peer();pe.on('open',()=>{c=pe.connect(HID,{reliable:true});c.on('open',()=>c.send({t:'proj'}));c.on('data',m=>{if(m.t==='v')draw(m.v)});c.on('close',retry)});pe.on('error',retry)}
+function retry(){clearTimeout(rt);rt=setTimeout(connect,2000)}
+function draw(v){if(!v.fin){A.innerHTML='<div class=c><h1>🏆 Group Champion</h1><p>Naghihintay sa Final Results…</p></div>';return}
+const ranks=v.sc.map((s,i)=>({g:i+1,s,tt:Number(v.rtime?.[i]||0)})).sort((a,b)=>b.s-a.s||a.tt-b.tt||a.g-b.g);
+const w=ranks[0], tied=ranks.filter(x=>x.s===w.s&&x.tt===w.tt),x=groupInfo(w.g);
+document.body.style.background=x.color;document.body.style.color=x.textColor;
+A.innerHTML=`<div class=c style="min-height:100vh;background:${x.color};color:${x.textColor}"><p style="font-weight:800;letter-spacing:.12em">SOE BIBLE QUIZ</p><h1>🏆 CHAMPION GROUP</h1><div class=big style="color:inherit">${tied.map(z=>groupInfo(z.g).code).join(' & ')}</div><h2>${tied.map(z=>groupInfo(z.g).leader).join(' & ')}</h2><p>${x.name} · ${w.s} POINTS</p>${tied.length===1?`<p>Total answer time: ${w.tt.toFixed(2)} seconds</p>`:'<p>Exact tie sa points at total answer time</p>'}</div>`}
+connect();
+</script></body></html>
